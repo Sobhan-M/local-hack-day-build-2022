@@ -75,21 +75,28 @@ def isSolved(puzzle:list, solution:list):
 			return False
 	return isValid(puzzle, solution)
 
-def main():
-	# Hard-coded puzzle for testing:
-	puzzle = [
-		[5, 3, 0, 0, 7, 0, 0, 0, 0],
-		[6, 0, 0, 1, 9, 5, 0, 0, 0],
-		[0, 9, 8, 0, 0, 0, 0, 6, 0],
-		[8, 0, 0, 0, 6, 0, 0, 0, 3],
-		[4, 0, 0, 8, 0, 3, 0, 0, 1],
-		[7, 0, 0, 0, 2, 0, 0, 0, 6],
-		[0, 6, 0, 0, 0, 0, 2, 8, 0],
-		[0, 0, 0, 4, 1, 9, 0, 0, 5],
-		[0, 0, 0, 0, 8, 0, 0, 7, 9]
-	]
+def stringListToIntList(strings:list):
+	for i in range(len(strings)):
+		strings[i] = int(strings[i])
+	return strings
 
-	print("Original Puzzle:")
+
+def importPuzzle(file_name:str):
+	puzzle = []
+
+	with open(file_name) as f:
+		for line in f:
+			puzzle.append(stringListToIntList(line.split()))
+	
+	return puzzle
+
+
+def main():
+	
+	file_name = input("\nPlease enter the file name of the puzzle: ")
+	puzzle = importPuzzle(file_name)
+	
+	print("\nOriginal Puzzle:")
 	printPuzzle(puzzle)
 
 	solution = [0]
@@ -102,7 +109,7 @@ def main():
 		elif isValid(puzzle, solution):
 			solution.append(0)
 
-	print("Puzzle With Solution:")
+	print("Solved Puzzle:")
 	printPuzzle(puzzleWithSolution(puzzle, solution))
 
 	
