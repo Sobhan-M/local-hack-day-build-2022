@@ -16,7 +16,7 @@ def hasUniqueRow(puzzle:list):
 
 def hasUniqueColumn(puzzle:list):
 	for i in range(9):
-		column = [puzzle[0][i], puzzle[1][i], puzzle[2][i], puzzle[3][i], puzzle[4][i], puzzle[5][i], puzzle[6][i], puzzle[7][i], puzzle[8[i]]]
+		column = [puzzle[0][i], puzzle[1][i], puzzle[2][i], puzzle[3][i], puzzle[4][i], puzzle[5][i], puzzle[6][i], puzzle[7][i], puzzle[8][i]]
 		for value in range(1, 10):
 			if (column.count(value) > 1):
 				return False
@@ -39,39 +39,41 @@ def hasUniqueBlock(puzzle:list):
 
 def puzzleWithSolution(puzzle:list, solution:list):
 
-	puzzleWithSolution = [[], [], [], [], [], [], [], [], []]
+	puzzle_with_solution = [[], [], [], [], [], [], [], [], []]
 
 	# Copying 2D array.
 	for i in range(9):
 		for j in range(9):
-			puzzleWithSolution[i].append(puzzle[i][j])
+			puzzle_with_solution[i].append(puzzle[i][j])
 
 	# Replacing each 0 in order with the solutions found.
 	row = 0
 	for value in solution:
-		hasInserted = False
+		has_inserted = False
 
 		for i in range(9):
 			for j in range(9):
-				if puzzleWithSolution[i][j] == 0:
-					puzzleWithSolution[i][j] = value
-					hasInserted = True
+				if puzzle_with_solution[i][j] == 0:
+					puzzle_with_solution[i][j] = value
+					has_inserted = True
 					break
-			if hasInserted:
+			if has_inserted:
 				break
 	
-	return puzzleWithSolution
+	return puzzle_with_solution
+
+def isValid(puzzle:list, solution:list):
+	formatted_puzzle = puzzleWithSolution(puzzle, solution)
+	return hasUniqueBlock(formatted_puzzle) and hasUniqueColumn(formatted_puzzle) and hasUniqueRow(formatted_puzzle)
 	
 
+def isSolved(puzzle:list, solution:list):
+	formatted_puzzle = puzzleWithSolution(puzzle, solution)
 
-
-# def isValid(puzzle, solution):
-	
-
-# def isSolved(puzzle, solution):
-
-
-
+	for i in range(9):
+		if formatted_puzzle[i].count(0) > 0:
+			return False
+	return isValid(puzzle, solution)
 
 def main():
 	# Hard-coded puzzle for testing:
@@ -87,10 +89,23 @@ def main():
 		[0, 0, 0, 0, 8, 0, 0, 7, 9]
 	]
 
-	is_solved = False
-	
+	print("Original Puzzle:")
+	printPuzzle(puzzle)
 
-	printPuzzle(sudoku)
+	solution = [0]
+
+	while not isSolved(puzzle, solution):
+		solution[-1] += 1
+
+		if solution[-1] > 9:
+			solution.pop()
+		elif isValid(puzzle, solution):
+			solution.append(0)
+
+	print("Puzzle With Solution:")
+	printPuzzle(puzzleWithSolution(puzzle, solution))
+
+	
 
 if __name__ == "__main__":
 	main()
